@@ -1,8 +1,0 @@
-require 'plugins.snacks'
-require 'plugins.todo'
-require 'plugins.mini'
-require 'plugins.fidget'
-require 'plugins.mason'
-require 'plugins.conform'
-require 'plugins.blink'
-require 'plugins.treesitter'

@@ -5,7 +5,6 @@ return {
     version = 'main',
   },
   config = function()
-    -- First run: :TSUpdate to compile parsers for the languages below.
     require('nvim-treesitter').setup()
 
     local parsers = {
@@ -22,26 +21,32 @@ return {
       'json',
       'yaml',
     }
-    require('nvim-treesitter').install(parsers)
+
+    local ts_config = require 'nvim-treesitter.config'
+    local installed = ts_config.get_installed()
+    local to_install = vim.tbl_filter(function(lang) return not vim.tbl_contains(installed, lang) end, parsers)
+
+    if #to_install > 0 then
+      vim.notify('Installing treesitter parsers: ' .. table.concat(to_install, ', '), vim.log.levels.INFO)
+      require('nvim-treesitter').install(to_install, { summary = false })
+    end
+
     vim.api.nvim_create_autocmd('FileType', {
       callback = function(args)
         local ft = vim.bo[args.buf].filetype
         local lang = vim.treesitter.language.get_lang(ft) or ft
-        local ts_config = require 'nvim-treesitter.config'
+        local cfg = require 'nvim-treesitter.config'
 
-        if vim.tbl_contains(ts_config.get_installed(), lang) then
+        if vim.tbl_contains(cfg.get_installed(), lang) then
           pcall(vim.treesitter.start, args.buf)
           return
         end
+        if not vim.tbl_contains(cfg.get_available(), lang) then return end
 
-        if not vim.tbl_contains(ts_config.get_available(), lang) then return end
-
-        local notify = vim.notify
-        vim.notify = function() end
+        vim.notify('Installing treesitter parser: ' .. lang, vim.log.levels.INFO)
         require('nvim-treesitter').install({ lang }, { summary = false })
-        vim.notify = notify
 
-        local timer = vim.uv.new_timer()
+        local timer = assert(vim.uv.new_timer())
         timer:start(
           500,
           500,
@@ -49,7 +54,10 @@ return {
             if vim.tbl_contains(require('nvim-treesitter.config').get_installed(), lang) then
               timer:stop()
               timer:close()
-              if vim.api.nvim_buf_is_valid(args.buf) then pcall(vim.treesitter.start, args.buf) end
+              if vim.api.nvim_buf_is_valid(args.buf) then
+                pcall(vim.treesitter.start, args.buf)
+                vim.notify('Treesitter parser installed: ' .. lang, vim.log.levels.INFO)
+              end
             end
           end)
         )
@@ -57,4 +65,3 @@ return {
     })
   end,
 }
---  vim: set ts=2 sts=2 sw=2 et :
