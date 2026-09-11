@@ -1,0 +1,5 @@
+require 'core.lspconfig'
+require 'core.configs'
+require 'core.keymaps'
+require 'core.utils'
+require 'core.autocmd'
