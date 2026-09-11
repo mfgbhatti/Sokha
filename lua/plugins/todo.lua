@@ -1,3 +1,7 @@
 -- Highlight todo, notes, etc in comments
-vim.pack.add { 'https://github.com/folke/todo-comments.nvim' }
-require('todo-comments').setup { signs = false }
+return {
+  plugin = {
+    src = 'https://github.com/folke/todo-comments.nvim',
+  },
+  config = function() require('todo-comments').setup { signs = false } end,
+}

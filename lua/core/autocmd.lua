@@ -24,6 +24,13 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end
 
     local client = vim.lsp.get_client_by_id(event.data.client_id)
+
+    if not (client and client.name == 'basedpyright') then return end
+    local ruff_attached = #vim.lsp.get_clients { bufnr = event.buf, name = 'ruff' } > 0
+    if ruff_attached then
+      client.server_capabilities.hoverProvider = false -- let ruff handle hover instead
+    end
+
     if
       client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf)
     then
@@ -51,44 +58,29 @@ vim.api.nvim_create_autocmd('LspAttach', {
         end,
       })
     end
+    local opts = { buffer = event.buf }
+    vim.keymap.set(
+      { 'n', 'v' },
+      '<leader>ca',
+      vim.lsp.buf.code_action,
+      vim.tbl_extend('force', opts, { desc = 'Code action' })
+    )
+    vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, vim.tbl_extend('force', opts, { desc = 'Rename symbol' }))
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, vim.tbl_extend('force', opts, { desc = 'Go to definition' }))
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, vim.tbl_extend('force', opts, { desc = 'Hover docs' }))
   end,
 })
--- Purely, using both basedpyright and ruff for python
-vim.api.nvim_create_autocmd('LspAttach', {
-  callback = function(args)
-    local client = vim.lsp.get_client_by_id(args.data.client_id)
-    if not (client and client.name == 'basedpyright') then return end
-    local ruff_attached = #vim.lsp.get_clients { bufnr = args.buf, name = 'ruff' } > 0
-    if ruff_attached then
-      client.server_capabilities.hoverProvider = false -- let ruff handle hover instead
+-- See `:help vim.pack-events`
+vim.api.nvim_create_autocmd('PackChanged', {
+  callback = function(event)
+    local name = event.data.spec.name
+    local kind = event.data.kind
+    if kind ~= 'install' and kind ~= 'update' then return end
+
+    if name == 'nvim-treesitter' then
+      if not event.data.active then vim.cmd.packadd 'nvim-treesitter' end
+      vim.cmd 'TSUpdate'
+      return
     end
   end,
 })
-
-local function run_build(name, cmd, cwd)
-    local result = vim.system(cmd, { cwd = cwd }):wait()
-    if result.code ~= 0 then
-      local stderr = result.stderr or ''
-      local stdout = result.stdout or ''
-      local output = stderr ~= '' and stderr or stdout
-      if output == '' then output = 'No output from build command.' end
-      vim.notify(('Build failed for %s:\n%s'):format(name, output), vim.log.levels.ERROR)
-    end
-  end
-
-  -- This autocommand runs after a plugin is installed or updated and
-  --  runs the appropriate build command for that plugin if necessary.
-  -- See `:help vim.pack-events`
-  vim.api.nvim_create_autocmd('PackChanged', {
-    callback = function(ev)
-      local name = ev.data.spec.name
-      local kind = ev.data.kind
-      if kind ~= 'install' and kind ~= 'update' then return end
-
-      if name == 'nvim-treesitter' then
-        if not ev.data.active then vim.cmd.packadd 'nvim-treesitter' end
-        vim.cmd 'TSUpdate'
-        return
-      end
-    end,
-  })

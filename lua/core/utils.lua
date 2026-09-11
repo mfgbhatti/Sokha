@@ -1,17 +1,30 @@
 -- ~/.config/nvim/lua/core/utils.lua
--- a. Modeline
-local function append_modeline()
-  local expandtab_str = vim.o.expandtab and '' or 'no'
-  local modeline = string.format(
-    ' vim: set ts=%d sts=%d sw=%d %set :',
-    vim.o.tabstop,
-    vim.o.softtabstop,
-    vim.o.shiftwidth,
-    expandtab_str
-  )
-  modeline = string.gsub(vim.o.commentstring, '%%s', modeline)
-  vim.api.nvim_buf_set_lines(0, -1, -1, true, { modeline })
-end
-vim.keymap.set('n', '<Leader>ml', append_modeline, { silent = true })
 
+local M = {}
+
+local has_android = vim.env.TERMUX_VERSION ~= nil
+
+-- Define boolean flags on the M table
+M.is_android = has_android
+M.is_linux = vim.fn.has 'linux' == 1 and not has_android
+M.is_windows = vim.fn.has 'win32' == 1
+
+-- Lookup table used by on_platform() below
+local platform_flags = {
+  android = M.is_android,
+  linux = M.is_linux,
+  mac = M.is_mac,
+  windows = M.is_windows,
+}
+
+---Conditional runner utility
+---@param platform 'android' | 'linux' | 'mac' | 'windows'
+---@param callback function Code block to run if platform matches
+function M.on_platform(platform, callback)
+  local matches = platform_flags[platform]
+  if matches == nil then error(("on_platform: unknown platform '%s'"):format(platform), 2) end
+  if matches then callback() end
+end
+
+return M
 --  vim: set ts=2 sts=2 sw=2 et :
