@@ -50,8 +50,6 @@ map('v', '<Leader>p', '"_dP', 'Paste without overwriting default register')
 
 map('n', '<leader>cd', '<cmd>lua vim.fn.chdir(vim.fn.expand("%:p:h"))<CR>', 'Change directory')
 
-map('n', 'grd', '<cmd>lua vim.lsp.buf.definition()<CR>', 'Goto definition', { expr = true })
-
 map('n', '<leader>ps', '<cmd>lua vim.pack.update()<CR>', 'Update plugins')
 
 map('i', 'jk', '<Esc>', 'Exit insert mode')

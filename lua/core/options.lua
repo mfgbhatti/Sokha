@@ -37,19 +37,14 @@ opt.smartcase = true
 opt.hlsearch = false
 opt.inccommand = 'split'
 -- Draw a vertical guide line
-opt.colorcolumn = '100'
 -- Always reserve space
 opt.signcolumn = 'yes:1'
 -- Enable 24-bit RGB colors
 opt.termguicolors = true
 -- Line numbers --off-for-mobile
-if platform.is_android then
-  opt.number = false
-  opt.relativenumber = false
-else
-  opt.number = true
-  opt.relativenumber = true
-end
+opt.number = true
+opt.relativenumber = true
+opt.colorcolumn = '100'
 opt.numberwidth = 2
 -- Disable soft line wrapping;
 opt.wrap = true
@@ -139,4 +134,7 @@ opt.wildignore:append {
   '*.synctex.gz',
   '*.xdv',
 }
+
+if platform.is_android then require 'core.mobile' end
+
 -- vim: set ts=2 sts=2 sw=2 et :

@@ -13,12 +13,11 @@ M.is_windows = vim.fn.has 'win32' == 1
 local platform_flags = {
   android = M.is_android,
   linux = M.is_linux,
-  mac = M.is_mac,
   windows = M.is_windows,
 }
 
 ---Conditional runner utility
----@param platform 'android' | 'linux' | 'mac' | 'windows'
+---@param platform 'android' | 'linux' | 'windows'
 ---@param callback function Code block to run if platform matches
 function M.on_platform(platform, callback)
   local matches = platform_flags[platform]

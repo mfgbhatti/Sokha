@@ -2,7 +2,7 @@
 local command = vim.api.nvim_create_user_command
 
 -- Remove Trailing Whitespace
-command('RemoveTrailingSpaces', function() vim.cmd ':%s/s+$//e' end, {
+command('RemoveTrailingSpaces', function() vim.cmd [[%s/\s\+$//e]] end, {
   desc = 'Remove all trailing spaces in the current buffer',
 })
 

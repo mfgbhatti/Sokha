@@ -1,27 +1,30 @@
 -- ~/.config/nvim/lsp/lspconfig.lua
 --
 local platform = require 'core.utils'
-local available_lsps = {
-  'stylua',
-  'lua_ls',
-  'ruff',
-  'cssls',
-  'html',
-  'yamlls',
-  'bashls',
-  'basedpyright',
-  'emmet_language_server',
-  'nginx_language_server',
+
+local lsps = {
+  common = {
+    'html',
+    'ruff',
+    'cssls',
+    'lua_ls',
+    'stylua',
+    'bashls',
+    'yamlls',
+    'basedpyright',
+    'emmet_language_server',
+    'nginx_language_server',
+  },
+
+  linux = {
+    'djls',
+    'tsc',
+  },
 }
 
-local linux_lsps = {
-  'djls',
-  'tsc',
-}
-local all_lsps = vim.list_extend({}, available_lsps)
+local current = platform.is_android and 'android' or 'linux'
 
-if platform.is_linux then vim.list_extend(all_lsps, linux_lsps) end
-vim.lsp.enable(all_lsps)
+vim.lsp.enable(vim.list_extend(vim.deepcopy(lsps.common), lsps[current] or {}))
 
 vim.diagnostic.config {
   update_in_insert = false,
