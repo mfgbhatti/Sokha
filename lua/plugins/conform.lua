@@ -34,7 +34,7 @@ return {
         html = { 'prettier' },
         css = { 'prettier' },
         scss = { 'prettier' },
-        yaml = { 'prettier' },
+        yaml = { 'prettier_yaml' },
         -- rust = { 'rustfmt' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
@@ -43,7 +43,30 @@ return {
       },
       formatters = {
         prettier = {
-          prepend_args = { '--tab-width','2', '--no-use-tabs','--no-semi', '--single-quote', '--trailing-comma', 'all' },
+          prepend_args = {
+            '--tab-width',
+            '2',
+            '--no-use-tabs',
+            '--no-semi',
+            '--single-quote',
+            '--trailing-comma',
+            'all',
+          },
+        },
+        prettier_yaml = {
+          command = 'prettier',
+          args = {
+            '--stdin-filepath',
+            '$FILENAME',
+            '--parser',
+            'yaml',
+            '--tab-width',
+            '2',
+            '--no-use-tabs',
+            '--single-quote',
+            '--trailing-comma',
+            'all',
+          },
         },
       },
     }
