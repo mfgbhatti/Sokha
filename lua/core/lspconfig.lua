@@ -1,21 +1,27 @@
 -- ~/.config/nvim/lsp/lspconfig.lua
 --
-vim.lsp.enable {
+local platform = require 'core.utils'
+local available_lsps = {
   'stylua',
   'lua_ls',
-  'bashls',
-  'basedpyright',
   'ruff',
   'cssls',
-  -- 'djls', -- djls no binary for termux
-  'emmet_language_server',
   'html',
-  -- 'biome' --not working,
-  'nginx_language_server',
-  'ts_ls',
-  -- 'tsc', -- when tsc 7.2.0 is supported
   'yamlls',
+  'bashls',
+  'basedpyright',
+  'emmet_language_server',
+  'nginx_language_server',
 }
+
+local linux_lsps = {
+  'djls',
+  'tsc',
+}
+local all_lsps = vim.list_extend({}, available_lsps)
+
+if platform.is_linux then vim.list_extend(all_lsps, linux_lsps) end
+vim.lsp.enable(all_lsps)
 
 vim.diagnostic.config {
   update_in_insert = false,

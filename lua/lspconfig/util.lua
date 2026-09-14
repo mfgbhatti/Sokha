@@ -62,6 +62,7 @@ function M.root_markers_with_field(root_files, new_names, field, fname, match_mo
   local path = vim.fn.fnamemodify(fname, ':h')
   local found = vim.fs.find(new_names, { path = path, upward = true, type = 'file' })
   local fields = type(field) == 'string' and { field } or field
+---@diagnostic disable-next-line: param-type-mismatch
   local to_find = vim.deepcopy(fields)
   local matcher = (match_mode or 'any') == 'any'
       and function(line)

@@ -1,6 +1,8 @@
 tags
+nvim
+spell/
 test.sh
 .luarc.json
-nvim
+package.json
+package-lock.json
 nvim-pack-lock.json
-spell/

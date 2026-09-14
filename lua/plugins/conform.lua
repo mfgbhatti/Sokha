@@ -25,15 +25,16 @@ return {
       formatters_by_ft = {
         bash = { 'shfmt' },
         python = { 'ruff_format' },
-        javascript = { 'biome' },
-        typescript = { 'biome' },
-        javascriptreact = { 'biome' },
-        typescriptreact = { 'biome' },
-        json = { 'biome' },
-        jsonc = { 'biome' },
-        html = { 'prettierd' },
-        css = { 'prettierd' },
-        scss = { 'prettierd' },
+        javascript = { 'prettier' },
+        typescript = { 'prettier' },
+        javascriptreact = { 'prettier' },
+        typescriptreact = { 'prettier' },
+        json = { 'prettier' },
+        jsonc = { 'prettier' },
+        html = { 'prettier' },
+        css = { 'prettier' },
+        scss = { 'prettier' },
+        yaml = { 'prettier' },
         -- rust = { 'rustfmt' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
@@ -41,12 +42,8 @@ return {
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
       },
       formatters = {
-        biome = {
-          require_cwd = true,
-          prepend_args = { '--indent-style=space', '--indent-width=2' },
-        },
-        prettierd = {
-          prepend_args = { '--tab-width', '2', '--no-use-tabs' },
+        prettier = {
+          prepend_args = { '--tab-width','2', '--no-use-tabs','--no-semi', '--single-quote', '--trailing-comma', 'all' },
         },
       },
     }
