@@ -7,6 +7,6 @@
 ---@type vim.lsp.Config
 return {
   cmd = { 'djls', 'serve' },
-  filetypes = { 'htmldjango', 'html', 'python' },
+  filetypes = { 'htmldjango' },
   root_markers = { 'manage.py', 'pyproject.toml', '.git' },
 }

@@ -32,6 +32,7 @@ return {
         json = { 'prettier' },
         jsonc = { 'prettier' },
         html = { 'prettier' },
+        htmldjango = { 'djlint' },
         css = { 'prettier' },
         scss = { 'prettier' },
         yaml = { 'prettier_yaml' },

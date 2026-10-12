@@ -7,6 +7,9 @@ local lsps = {
     'html',
     'ruff',
     'cssls',
+    'djls',
+    'shuck',
+    'tombi',
     'lua_ls',
     'stylua',
     'bashls',
@@ -17,7 +20,6 @@ local lsps = {
   },
 
   linux = {
-    'djls',
     'tsc',
   },
 }
