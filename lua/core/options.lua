@@ -5,7 +5,7 @@ local platform = require 'core.utils'
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 -- colorscheme
-vim.cmd.colorscheme 'murphy' -- catppuccin murphy
+vim.cmd.colorscheme 'catppuccin' -- catppuccin murphy
 -- global variable
 vim.g.have_nerd_font = true
 local opt = vim.opt
