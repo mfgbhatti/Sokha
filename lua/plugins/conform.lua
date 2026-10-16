@@ -23,6 +23,7 @@ return {
       },
       -- You can also specify external formatters in here.
       formatters_by_ft = {
+        sh = { 'shfmt' },
         bash = { 'shfmt' },
         python = { 'ruff_format' },
         javascript = { 'prettier' },
